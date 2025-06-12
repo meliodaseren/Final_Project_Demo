@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean test
 
 all:
 	@echo "docker compose up -d"
@@ -144,3 +144,10 @@ clean:
 
 	@sudo ip link delete vethR65020Ovs || true
 	@sudo ip link delete vethOvsR65020 || true
+
+test:
+
+	chmod 755 network_test.sh
+	./network_test.sh
+	chmod 755 ping_test.sh
+	./ping_test.sh
