@@ -1,0 +1,20 @@
+{
+	"priority": 49996,
+	"isPermanent": true,
+	"selector": {
+		"criteria": [
+			{
+				"type": "IN_PORT",
+				"port": "1"
+			}
+		]
+	},
+	"treatment": {
+		"instructions": [
+			{
+				"type": "OUTPUT",
+				"port": "2"
+			}
+		]
+	}
+}

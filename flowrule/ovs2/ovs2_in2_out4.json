@@ -1,0 +1,33 @@
+{
+	"priority": 60000,
+	"isPermanent": true,
+	"selector": {
+		"criteria": [
+			{
+				"type": "IN_PORT",
+				"port": "2"
+			},
+			{
+				"type": "ETH_TYPE",
+				"ethType": "0x0800"
+			},
+			{
+				"type": "IPV4_DST",
+				"ip": "10.0.0.3/32"
+			}
+		]
+	},
+	"treatment": {
+		"instructions": [
+			{
+				"type": "L2MODIFICATION",
+				"subtype": "ETH_DST",
+				"mac": "04:42:c8:a8:00:66"
+			},
+			{
+				"type": "OUTPUT",
+				"port": "4"
+			}
+		]
+	}
+}
