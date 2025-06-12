@@ -1,3 +1,15 @@
+## Installation
+
+```sh
+make clean
+make
+./install_flow_rule.sh
+./network_test.sh
+./ping_test.sh
+```
+
+---
+
 ## Topology
 
 **AS65000 (SDN netword)**
@@ -212,9 +224,14 @@ Requirement
 
 ---
 
-### TA Hints
+### Deployment Requirements
 
-DEMO part
+* Only openflow (and route related apps can be use
+* Cannot use Reactive forwarding (org.onosproject.fwd)
+
+---
+
+### Hints
 
 * Requires network knowledge and SDN knowledge
 * Steps to solve a problem
@@ -228,13 +245,6 @@ DEMO part
   * How it is decided
 * Flow priority is important remember to check
 * Docker compose will auto assign a gateway, this might not be what you want!!!!
-
----
-
-### Deployment Requirements
-
-* Only openflow (and route related apps can be use
-* Cannot use Reactive forwarding (org.onosproject.fwd)
 
 ---
 
