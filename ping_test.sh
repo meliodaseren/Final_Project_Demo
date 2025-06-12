@@ -9,17 +9,21 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'  # no color
 
-echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}    SDN NFV Network Connectivity Test   ${NC}"
-echo -e "${BLUE}========================================${NC}"
-echo ""
-
 WEBS="00 10 20 21"
 IPS="192.168.0.100 10.0.0.3 10.1.0.3 10.2.0.3"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}    Additional Quick Ping Tests         ${NC}"
 echo -e "${BLUE}========================================${NC}"
+
+check_container() {
+    local container_name="web650$1"
+    if ! docker ps --format "table {{.Names}}" | grep -q "^${container_name}$"; then
+        echo -e "${RED}ERROR: Container ${container_name} is not running!${NC}"
+        return 1
+    fi
+    return 0
+}
 
 ping_test() {
     local web=$1
