@@ -1,4 +1,4 @@
-.PHONY: all clean test
+.PHONY: all test clean
 
 all:
 	@echo "info: docker compose up -d"
@@ -115,6 +115,14 @@ all:
 	chmod 755 install_flow_rule.sh
 	./install_flow_rule.sh
 
+test:
+
+	chmod 755 network_test.sh
+	./network_test.sh
+
+	chmod 755 ping_test.sh
+	./ping_test.sh
+
 clean:
 
 	@echo "info: docker compose down"
@@ -144,10 +152,3 @@ clean:
 
 	@sudo ip link delete vethR65020Ovs || true
 	@sudo ip link delete vethOvsR65020 || true
-
-test:
-
-	chmod 755 network_test.sh
-	./network_test.sh
-	chmod 755 ping_test.sh
-	./ping_test.sh
