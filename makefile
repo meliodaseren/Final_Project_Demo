@@ -1,16 +1,16 @@
 .PHONY: all clean test
 
 all:
-	@echo "docker compose up -d"
+	@echo "info: docker compose up -d"
 	docker compose up -d
 	sleep 5
 	@docker ps
 
-	@echo "create OVC ..."
+	@echo "info: create OVC"
 	sudo ovs-vsctl add-br ovs1
 	sudo ovs-vsctl add-br ovs2
 
-	@echo "create NIC ..."
+	@echo "info: create NIC"
 	sudo ip link add veth-ovs1 type veth peer name veth-ovs2
 	sudo ovs-vsctl add-port ovs1 veth-ovs1
 	sudo ovs-vsctl add-port ovs2 veth-ovs2
@@ -18,7 +18,7 @@ all:
 	sudo ip link set veth-ovs2 up
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=web65000")); \
-	echo "web65000 PID: $$PID"; \
+	echo "info: web65000 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip link add vethWeb65000Ovs type veth peer name vethOvsWeb65000; \
 	sudo ip link set vethWeb65000Ovs netns $$PID; \
@@ -29,7 +29,7 @@ all:
 	sudo ip link set vethOvsWeb65000 up
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=bgp-speaker")); \
-	echo "bgp-speaker PID: $$PID"; \
+	echo "info: bgp-speaker PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip link add vethSpeakerOvs type veth peer name vethOvsSpeaker; \
 	sudo ip link set vethSpeakerOvs netns $$PID; \
@@ -41,7 +41,7 @@ all:
 	sudo ip link set vethOvsSpeaker up
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=r65010")); \
-	echo "r65010 PID: $$PID"; \
+	echo "info: r65010 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip link add vethR65010Ovs type veth peer name vethOvsR65010; \
 	sudo ip link set vethR65010Ovs netns $$PID; \
@@ -52,7 +52,7 @@ all:
 	sudo ip link set vethOvsR65010 up
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=r65021")); \
-	echo "r65021 PID: $$PID"; \
+	echo "info: r65021 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip link add vethR65021Ovs type veth peer name vethOvsR65021; \
 	sudo ip link set vethR65021Ovs netns $$PID; \
@@ -63,7 +63,7 @@ all:
 	sudo ip link set vethOvsR65021 up
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=r65020")); \
-	echo "r65020 PID: $$PID"; \
+	echo "info: r65020 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip link add vethR65020Ovs type veth peer name vethOvsR65020; \
 	sudo ip link set vethR65020Ovs netns $$PID; \
@@ -74,25 +74,25 @@ all:
 	sudo ip link set vethOvsR65020 up
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=web65000")); \
-	echo "web65000 PID: $$PID"; \
+	echo "info: web65000 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip netns exec $$PID ip route del default; \
 	sudo ip netns exec $$PID ip route add default via 192.168.0.2
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=web65010")); \
-	echo "web65010 PID: $$PID"; \
+	echo "info: web65010 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip netns exec $$PID ip route del default; \
 	sudo ip netns exec $$PID ip route add default via 10.0.0.2
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=web65021")); \
-	echo "web65021 PID: $$PID"; \
+	echo "info: web65021 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip netns exec $$PID ip route del default; \
 	sudo ip netns exec $$PID ip route add default via 10.2.0.2
 
 	@PID=$$(docker inspect -f '{{.State.Pid}}' $$(docker ps -aqf "name=web65020")); \
-	echo "web65020 PID: $$PID"; \
+	echo "info: web65020 PID: $$PID"; \
 	sudo ln -sf /proc/$$PID/ns/net /var/run/netns/$$PID; \
 	sudo ip netns exec $$PID ip route del default; \
 	sudo ip netns exec $$PID ip route add default via 10.1.0.2
@@ -111,22 +111,22 @@ all:
 
 	sleep 30
 
-	@echo "install flow rule ..."
+	@echo "info: install flow rule"
 	chmod 755 install_flow_rule.sh
 	./install_flow_rule.sh
 
 clean:
 
-	@echo "docker compose down ..."
+	@echo "info: docker compose down"
 	docker compose down
 	# docker compose down -v --remove-orphans
 	docker network prune -f
 
-	@echo "delete OVS bridge ovs ..."
+	@echo "info: delete OVS bridge ovs"
 	sudo ovs-vsctl --if-exists del-br ovs1
 	sudo ovs-vsctl --if-exists del-br ovs2
 
-	@echo "delete NIC ..."
+	@echo "info: delete NIC"
 	@sudo ip link delete veth-ovs1 || true
 	@sudo ip link delete veth-ovs2 || true
 
