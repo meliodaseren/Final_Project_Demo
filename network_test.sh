@@ -90,36 +90,3 @@ echo -e "  • 10.1.0.3      (AS65020 web container)"
 echo -e "  • 10.2.0.3      (AS65021 web container)"
 echo ""
 echo -e "${GREEN}Test completed!${NC}"
-
-echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}    Additional Quick Ping Tests         ${NC}"
-echo -e "${BLUE}========================================${NC}"
-
-ping_test() {
-    local web=$1
-    local ip=$2
-    local container_name="web650$web"
-
-    if check_container "$web"; then
-        local pid=$(get_container_pid "$web")
-        if [ $? -eq 0 ]; then
-            echo -n -e "${YELLOW}PING $container_name -> $ip: ${NC}"
-            if sudo nsenter -t "$pid" -n ping -c 1 -W 2 "$ip" >/dev/null 2>&1; then
-                echo -e "${GREEN}OK${NC}"
-            else
-                echo -e "${RED}FAIL${NC}"
-            fi
-        fi
-    fi
-}
-
-echo "Quick ping connectivity matrix:"
-echo ""
-for web in $WEBS; do
-    for ip in $IPS; do
-        ping_test "$web" "$ip"
-    done
-done
-
-echo ""
-echo -e "${BLUE}All tests completed!${NC}"
