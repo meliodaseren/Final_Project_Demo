@@ -116,8 +116,11 @@ all:
 	./install_flow_rule.sh
 
 clean:
+
 	@echo "docker compose down ..."
 	docker compose down
+	# docker compose down -v --remove-orphans
+	docker network prune -f
 
 	@echo "delete OVS bridge ovs ..."
 	sudo ovs-vsctl --if-exists del-br ovs1

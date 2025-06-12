@@ -35,6 +35,36 @@
 
 ---
 
+## Command
+
+```sh
+# check docker network
+docker ps -a
+docker network ls
+
+# remove docker network
+docker compose down -v --remove-orphans
+docker network prune -f
+
+docker network rm $(docker network ls -q --filter name=sdn)
+docker network rm $(docker network ls -q --filter name=virtual)
+docker network rm $(docker network ls -q --filter name=router)
+
+# remove ovs
+sudo ovs-vsctl --if-exists del-br ovs1
+sudo ovs-vsctl --if-exists del-br ovs2
+sudo ovs-vsctl show
+
+# restart docker
+sudo systemctl restart docker
+
+# stop and remove docker container
+docker stop $(docker ps -aq) 2>/dev/null || true
+docker rm $(docker ps -aq) 2>/dev/null || true
+```
+
+---
+
 ## Project Information and Installation
 
 ### Configuration Requirements
@@ -51,10 +81,6 @@
 * Container images
   * FRR container frrouting frr Debian
   * Web container traefik whoami
-
-```sh
-docker ps -a
-```
 
 ---
 
